@@ -748,6 +748,19 @@ function getDevices(callback) {
                 }
             }
         }
+
+        for (let i = 0; i < listDevices.length; i++) {
+            if (listDevices[i].NAME) {
+                const deviceAddress = listDevices[i].ADDRESS;
+                names[deviceAddress] = listDevices[i].Name = listDevices[i].NAME;
+                const children = indexChannels[deviceAddress].CHILDREN;
+                if (children) {
+                    children.forEach(child => {
+                        names[child] = listDevices[i].Name + ':' + children.indexOf(child);
+                    });
+                }
+            }
+        }
     });
 }
 function initGridDevices() {
@@ -1530,7 +1543,7 @@ function refreshGridDevices() {
 
         if (names[listDevices[i].ADDRESS]) {
             listDevices[i].Name = names[listDevices[i].ADDRESS];
-        }
+        } 
 
         let paramsets = '';
         for (let j = 0; j < listDevices[i].PARAMSETS.length; j++) {
